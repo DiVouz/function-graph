@@ -1,2 +1,2 @@
 # functionGraph
-Graph of a function in Javascript.
+Create the graph of a function in Javascript.
