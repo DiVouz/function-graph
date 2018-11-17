@@ -3,11 +3,18 @@ let zoom = 50;
 let canvasScale = 800;
 
 let yy = [];
+let rr = [];
+let gg = [];
+let bb = [];
 let index = 0;
 
 function setup() {
 	createCanvas(canvasScale, canvasScale);
 	frameRate(1/2);
+
+	addF();
+	addF();
+	addF();
 }
 
 function draw() {
@@ -33,10 +40,12 @@ function draw() {
 		//f(-sqrt( 2 - ( (x-2)*(x-2) ) ) + 2, x);
 		//f( sqrt( 2 - ( (x-2)*(x-2) ) ) + 2, x);.
 
-		for(let y of yy){
-			if(y != null){
-				stroke(0, 0, 255);
-				f(eval(y), x);
+		zoom = document.getElementById("zoomSlider").value;
+
+		for(let j = 0; j < yy.length; j++){
+			if(yy[j] != null){
+				stroke(rr[j], gg[j], bb[j]);
+				f(eval(yy[j]), x);
 			}
 		}
 	}
@@ -58,10 +67,36 @@ function f(y, x, from, to) {
 }
 
 function addF() {
-	document.getElementById("functionDiv").innerHTML = '<div style="margin-top:10px; margin-bottom:10px;"><label>f(x)=</label><input type="input" id="function' + index + '" name="function' + index + '" value="x"><button onclick="submit(' + index + ')">Submit</button></div>' + document.getElementById("functionDiv").innerHTML;
+	document.getElementById("functionDiv").innerHTML = '<div style="margin-top:10px; margin-bottom:10px;"><label>f(x)=</label><input type="input" id="function' + index + '" name="function' + index + '" value="x"><button id="submit' + index + '" onclick="submit(' + index + ')">Submit</button><input type="text" id="red' + index + '" value="0" style="color:white; background-color:red;" minlength="1" maxlength="3" size="1"></input><input type="text" id="green' + index + '" value="0" style="color:white; background-color:green;" minlength="1" maxlength="3" size="1"></input><input type="text" id="blue' + index + '" value="0" style="color:white; background-color:blue;" minlength="1" maxlength="3" size="1"></input></div>' + document.getElementById("functionDiv").innerHTML;
 	index++;
 }
 
 function submit(i) {
-	yy.push(document.getElementById("function"+i).value);
+	if(document.getElementById("submit"+i).innerHTML == "Remove"){
+		yy.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
+
+		rr.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
+		gg.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
+		bb.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
+
+		document.getElementById("submit"+i).innerHTML = "Submit";
+		document.getElementById("function"+i).disabled = false;
+
+		document.getElementById("red"+i).disabled = false;
+		document.getElementById("green"+i).disabled = false;
+		document.getElementById("blue"+i).disabled = false;
+	}else{
+		yy.push(document.getElementById("function"+i).value);
+
+		rr.push(document.getElementById("red"+i).value);
+		gg.push(document.getElementById("green"+i).value);
+		bb.push(document.getElementById("blue"+i).value);
+
+		document.getElementById("submit"+i).innerHTML = "Remove";
+		document.getElementById("function"+i).disabled = true;
+
+		document.getElementById("red"+i).disabled = true;
+		document.getElementById("green"+i).disabled = true;
+		document.getElementById("blue"+i).disabled = true;
+	}
 }
