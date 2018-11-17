@@ -67,7 +67,7 @@ function f(y, x, from, to) {
 }
 
 function addF() {
-	document.getElementById("functionDiv").innerHTML = '<div style="margin-top:10px; margin-bottom:10px;"><label>f(x)=</label><input type="input" id="function' + index + '" name="function' + index + '" value="x"><button id="submit' + index + '" onclick="submit(' + index + ')">Submit</button><input type="text" id="red' + index + '" value="0" style="color:white; background-color:red;" minlength="1" maxlength="3" size="1"></input><input type="text" id="green' + index + '" value="0" style="color:white; background-color:green;" minlength="1" maxlength="3" size="1"></input><input type="text" id="blue' + index + '" value="0" style="color:white; background-color:blue;" minlength="1" maxlength="3" size="1"></input></div>' + document.getElementById("functionDiv").innerHTML;
+	document.getElementById("functionDiv").innerHTML = '<div style="margin-top:10px; margin-bottom:10px;"><label>f(x)=</label><input type="input" id="function' + index + '" name="function' + index + '" value="x"><button id="submit' + index + '" onclick="submit(' + index + ')">Submit</button><input type="text" id="red' + index + '" value="255" style="color:white; background-color:red;" minlength="1" maxlength="3" size="1"></input><input type="text" id="green' + index + '" value="255" style="color:white; background-color:green;" minlength="1" maxlength="3" size="1"></input><input type="text" id="blue' + index + '" value="255" style="color:white; background-color:blue;" minlength="1" maxlength="3" size="1"></input></div>' + document.getElementById("functionDiv").innerHTML;
 	index++;
 }
 
