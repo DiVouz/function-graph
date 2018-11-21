@@ -1,7 +1,5 @@
 let zoom;
 
-let canvasScale;
-
 let xFrom = [];
 let xTo = [];
 let yy = [];
@@ -11,19 +9,19 @@ let bb = [];
 let index;
 
 function setup() {
-	canvasScale = 800;
 	index = 0;
 
-	createCanvas(canvasScale, canvasScale);
-	frameRate(1/2);
+	createCanvas(window.innerWidth-15, window.innerHeight-15);
 
+	frameRate(1/2);
 	translate(width/2, height/2);
 
-	addF();
-	addF();
-	addF();
-
+	createZoomSlider();
 	updateZoom();
+
+	addF();
+	addF();
+	addF();
 
 	submit(2);
 }
@@ -35,10 +33,8 @@ function draw() {
 function updateOnChange() {
 	background(255);
 
-	for(x = (1/zoom)-(width/2)/zoom; x <= (width/2)/zoom; x+=1/(2*zoom)) {
-		stroke(150, 150, 150);
-		f(0, x);
-		f(x, 0);
+	for(let x = (1/zoom)-(width/2)/zoom; x <= (width/2)/zoom; x+=1/(2*zoom)) {
+		createAxis(x);
 
 		for(let j = 0; j < yy.length; j++) {
 			if(yy[j] != null){
@@ -47,10 +43,35 @@ function updateOnChange() {
 			}
 		}
 	}
+
+	stroke(150, 150, 150);
+	let lineLength = 10;
+
+	for(let x = 0.1; x <= (width/2)/zoom; x+=0.1) {
+		if((round(x*10)/10 % 1) == 0) {
+			line(x*zoom, lineLength, x*zoom, -lineLength);
+			line(-x*zoom, lineLength, -x*zoom, -lineLength);
+		}else{
+			line(x*zoom, lineLength/2, x*zoom, -lineLength/2);
+			line(-x*zoom, lineLength/2, -x*zoom, -lineLength/2);
+		}
+	}
+
+	for(let y = 0.1; y <= (height/2)/zoom; y+=0.1) {
+		if((round(y*10)/10 % 1) == 0) {
+			line(lineLength, -y*zoom, -lineLength, -y*zoom);
+			line(lineLength, y*zoom, -lineLength, y*zoom);
+		}else{
+			line(lineLength/2, -y*zoom, -lineLength/2, -y*zoom);
+			line(lineLength/2, y*zoom, -lineLength/2, y*zoom);
+		}
+	}
 	
 }
 
 function f(yString, x, fromString, toString) {
+	let e = Math.E;
+
 	let from = eval(fromString);
 	let to = eval(toString);
 
@@ -78,6 +99,12 @@ function f(yString, x, fromString, toString) {
 
 	return line((x-(1/zoom))*zoom, -yLast*zoom, x*zoom, -y*zoom);
 	//return point(x*zoom, -y*zoom);
+}
+
+function createAxis(x) {
+	stroke(150, 150, 150);
+	f(0, x);
+	f(x, 0);
 }
 
 function addF() {
@@ -126,6 +153,10 @@ function submit(i) {
 		document.getElementById("blue"+i).disabled = true;
 	}
 	updateOnChange();
+}
+
+function createZoomSlider() {
+	document.getElementById("slideContainer").innerHTML = '<input type="range" min="' + width/20 + '" max="' + width + '" step="1" value="' + width/2 + '" id="zoomSlider" onchange="updateZoom()"><label style="font-size:30px;">Zoom</label>';
 }
 
 function updateZoom() {
