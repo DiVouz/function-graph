@@ -8,12 +8,9 @@
   	<script language="javascript" type="text/javascript" src="sketch.js"></script>
 </head>
 
-<body id="body">
-
+<body id="body" style="text-align:center; line-height: 1.5;">
 	<div style="margin-top:10px; margin-bottom:10px;">
-		<div class="slidecontainer">
-		  <input type="range" min="1" max="200" step="1" value="30" id="zoomSlider" onchange="updateZoom()">
-		  <label>Zoom</label>
+		<div id="slideContainer">
 		</div>
 		<!-- <button onclick="addF()">Add</button> -->
 	</div>
@@ -21,11 +18,17 @@
 	<div id="functionDiv">
 	</div>
 
-	<div>
-		<p style="font-size:17px;">| <b>nx = n*x</b> | <b>n:x = n/x</b> | <b>&#8730;x = sqrt(x)</b> | <b>x&#179; = pow(x, 3)</b> | <b>+&#x221e; = Infinity</b> | <b>-&#x221e; = -Infinity</b> | <b>π = PI</b> | <b>sinx = sin(x)</b> | <b>cosx = cos(x)</b> |</p>
-		<p style="font-size:17px;">| <b>semi-cercle = sqrt(pow(R, 2) - pow(x, 2))</b> |</p>
+	<div id="advices" style="font-size:18px; border:2px black solid; margin-bottom:10px;">
+		| nx = <b>n*x</b> | n:x = <b>n/x</b> | &#8730;x = <b>sqrt(x)</b> | x&#179; = <b>pow(x, 3)</b> | |x| = <b>abs(x)</b> |
+		<br>
+		| +&#x221e; = <b>Infinity</b> | -&#x221e; = <b>-Infinity</b> |
+		<br>
+		| <b>e</b> = 2.71828... | lnx = <b>log(x)</b> | log<sub>n</sub>x = <b>log(x)/log(n)</b> |
+		<br>
+		| π = <b>PI</b> | sinx = <b>sin(x)</b> | cosx = <b>cos(x)</b> |
+		<br>
+		<b>Example: &nbsp; f(x)=sqrt(pow(R, 2) - pow(x, 2)) &nbsp; x∈[-Infinity,Infinity] &nbsp; Color 0 0 0</b>
 	</div>
-
 </body>
 
 </html>
