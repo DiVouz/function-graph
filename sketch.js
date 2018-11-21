@@ -10,8 +10,12 @@ let index;
 
 function setup() {
 	index = 0;
-
-	createCanvas(window.innerWidth-15, window.innerHeight-15);
+	if(window.innerWidth < window.innerHeight){
+		createCanvas(window.innerWidth-15, window.innerWidth-15);
+	}else if(window.innerWidth >= window.innerHeight){
+		createCanvas(window.innerHeight-15, window.innerHeight-15);
+	}
+	
 
 	frameRate(1/2);
 	translate(width/2, height/2);
