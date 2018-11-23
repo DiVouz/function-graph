@@ -49,6 +49,8 @@ function updateOnChange() {
 
 	stroke(255, 0, 0);
 
+	createLinesOfAxis();
+
 	for(let x = (1/zoom)-(width/2)/zoom; x <= (width/2)/zoom; x+=1/zoom) {
 		createAxis(x);
 
@@ -64,8 +66,6 @@ function updateOnChange() {
 			}
 		}
 	}
-
-	createLinesOfAxis();	
 }
 
 function drawWords(x, y, index) {
