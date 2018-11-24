@@ -7,11 +7,9 @@ var bb = [];
 var stress = [];
 var index;
 
-var zoom;
-var zoomMin;
-var zoomMax;
-var zoomValue;
-var zoomStep;
+var aOut, aMin, aMax, aValue, aStep;
+
+var zoom, zoomMin, zoomMax, zoomValue, zoomStep;
 
 function setup() {
 
@@ -23,7 +21,7 @@ function setup() {
 		createCanvas(window.innerHeight-15, window.innerHeight-15);
 	}
 	
-	frameRate(1/2);
+	frameRate(1);
 	translate(width/2, height/2);
 
 	zoomMin = 0;
@@ -31,15 +29,22 @@ function setup() {
 	zoomValue = 40;
 	zoomStep = 1;
 
+	aMax = 20;
+	aMin = -aMax;
+	aValue = 0;
+	aStep = 1;
+
 	createZoomSlider();
 	updateZoom();
 
 	addF();
+	updateA();
 
 	submit(0);
 }
 
 function draw() {
+
 	translate(width/2, height/2);
 }
 
@@ -49,11 +54,9 @@ function updateOnChange() {
 
 	stroke(255, 0, 0);
 
-	createLinesOfAxis();
+	createAxis();
 
 	for(let x = (1/zoom)-(width/2)/zoom; x <= (width/2)/zoom; x+=1/zoom) {
-		createAxis(x);
-
 		for(let j = 0; j < yy.length; j++) {
 			if(yy[j] != null){
 				stroke(rr[j], gg[j], bb[j]);
@@ -73,7 +76,7 @@ function drawWords(x, y, index) {
   	text(index, x, y);
 }
 
-function createLinesOfAxis() {
+function createAxis() {
 	stroke(150, 150, 150);
 
 	let lineLength = 10;
@@ -85,6 +88,11 @@ function createLinesOfAxis() {
 	textSize(txtSize);
 
   	textAlign(CENTER, CENTER);
+
+  	for(let x = (1/zoom)-(width/2)/zoom; x <= (width/2)/zoom; x+=1/zoom) {
+		f(0, x);
+		f(x, 0);
+	}
 
 	for(let x = 0.1; x <= (width/2)/zoom; x+=0.1) {
 		x = round(x * 10) / 10;
@@ -187,11 +195,12 @@ function createLinesOfAxis() {
 
 		yLast = y;
 	}
-
 }
 
 function f(yString, x, fromString, toString) {
 	let e = Math.E;
+
+	let a = 1*aOut;
 
 	let from = eval(fromString);
 	let to = eval(toString);
@@ -222,6 +231,8 @@ function f(yString, x, fromString, toString) {
 
 function fstress(yString, x, fromString, toString) {
 	let e = Math.E;
+
+	let a = 1*aOut;
 
 	let from = eval(fromString);
 	let to = eval(toString);
@@ -264,12 +275,6 @@ function fstress(yString, x, fromString, toString) {
 	if(ys*zoom > height/2 || ys*zoom < -height/2) return null;
 
 	return line(xsLast*zoom, -ysLast*zoom, xs*zoom, -ys*zoom);
-}
-
-function createAxis(x) {
-	stroke(150, 150, 150);
-	f(0, x);
-	f(x, 0);
 }
 
 function addF() {
@@ -359,12 +364,20 @@ function submit(i) {
 	updateOnChange();
 }
 
+//+ create aSlider
 function createZoomSlider() {
-	document.getElementById("slideContainer").innerHTML = '<input type="range" min="' + zoomMin + '" max="' + zoomMax + '" step="' + zoomStep + '" value="' + zoomValue + '" id="zoomSlider" onchange="updateZoom()" style="width:50%;"><label style="font-size:30px;">Zoom</label>';
+
+	document.getElementById("slideContainer").innerHTML = '<input type="range" min="' + zoomMin + '" max="' + zoomMax + '" step="' + zoomStep + '" value="' + zoomValue + '" id="zoomSlider" onchange="updateZoom()" style="width:50%;"><label style="font-size:30px;">Zoom</label><div> <label>a</label><input type="range" min="' + aMin + '" max="' + aMax + '" step="' + aStep + '" value="' + aValue + '" id="aSlider" onchange="updateA()" style="width:25%"><label id="aValueID">' + aValue +'</label></div>';
 }
 
 function updateZoom() {
 	zoom = document.getElementById("zoomSlider").value;
 	if(zoom <= 0.5) zoom = 0.5;
 	updateOnChange();
+}
+
+function updateA() {
+	aOut = document.getElementById("aSlider").value;
+	updateOnChange();
+	document.getElementById("aValueID").innerHTML = aOut;
 }
