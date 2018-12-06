@@ -7,4 +7,4 @@ https://p5js.org/
 This project is still in development stage.
 
 Errors:
-f'(x) not working correctly.
+1) f'(x) not working correctly.
