@@ -7,5 +7,5 @@ https://p5js.org/
 # This project is still in development stage.
 
 
-# Errors:
+Errors:
 1) f'(x) not working correctly.
