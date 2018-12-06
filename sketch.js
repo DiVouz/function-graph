@@ -7,6 +7,8 @@ var bb = [];
 var stress = [];
 var index;
 
+var findex;
+
 var aOut, aMin, aMax, aValue, aStep;
 
 var zoom, zoomMin, zoomMax, zoomValue, zoomStep;
@@ -14,6 +16,7 @@ var zoom, zoomMin, zoomMax, zoomValue, zoomStep;
 function setup() {
 
 	index = 0;
+	findex = 0;
 
 	if(window.innerWidth < window.innerHeight){
 		createCanvas(window.innerWidth-15, window.innerWidth-15);
@@ -37,10 +40,10 @@ function setup() {
 	createZoomSlider();
 	updateZoom();
 
-	addF();
+	addInputF();
 	updateA();
 
-	submit(0);
+	//submit(0);
 }
 
 function draw() {
@@ -69,6 +72,8 @@ function updateOnChange() {
 			}
 		}
 	}
+
+	addF();
 }
 
 function drawWords(x, y, index) {
@@ -277,96 +282,90 @@ function fstress(yString, x, fromString, toString) {
 	return line(xsLast*zoom, -ysLast*zoom, xs*zoom, -ys*zoom);
 }
 
-function addF() {
-	document.getElementById("functionDiv").innerHTML = '<div style="margin-top:10px; margin-bottom:10px; font-size:17px;"><label>f(x)=</label><input type="input" id="function' + index + '" value="2*x-1"><button id="submit' + index + '" onclick="submit(' + index + ')">Submit</button> x∈[<input type="text" id="xFrom' + index + '"" value="-Infinity" size="2"></input>,<input type="text" id="xTo' + index + '"" value="Infinity" size="2"></input>] Color<input type="text" id="red' + index + '" value="0" style="color:white; background-color:red;" minlength="1" maxlength="3" size="1"></input><input type="text" id="green' + index + '" value="0" style="color:white; background-color:green;" minlength="1" maxlength="3" size="1"></input><input type="text" id="blue' + index + '" value="0" style="color:white; background-color:blue;" minlength="1" maxlength="3" size="1"></input> f΄(x)<input type="checkbox" id="stress' + index + '"></input></div>' + document.getElementById("functionDiv").innerHTML;
-	index++;
+function addInputF() {
+	document.getElementById("inputFunctionDiv").innerHTML = '<div style="margin-top:10px; margin-bottom:10px; font-size:17px;"><label>f(x)=</label><input type="input" id="function" value="2*x-1"><button id="add" onclick="submit()">Submit</button> x∈[<input type="text" id="xFrom" value="-Infinity" size="2"></input>,<input type="text" id="xTo" value="Infinity" size="2"></input>] Color<input type="text" id="red" value="0" style="color:white; background-color:red;" minlength="1" maxlength="3" size="1"></input><input type="text" id="green" value="0" style="color:white; background-color:green;" minlength="1" maxlength="3" size="1"></input><input type="text" id="blue" value="0" style="color:white; background-color:blue;" minlength="1" maxlength="3" size="1"></input> f΄(x)<input type="checkbox" id="stress"></input></div>' + document.getElementById("functionDiv").innerHTML;
 }
 
-function submit(i) {
-	if(document.getElementById("submit"+i).innerHTML == "Remove"){
-		yy.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
+function addF() {
+	document.getElementById("functionDiv").innerHTML = "";
+	for(let i = 0; i < yy.length; i++) {
+		if(yy[i] != null){
+			
+			let fstress = "";
+			if(stress[i]) fstress = "f΄(x)";
 
-		xFrom.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
-		xTo.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
-
-		rr.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
-		gg.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
-		bb.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
-
-		stress.splice(yy.indexOf(document.getElementById("function"+i).value), 1);
-
-		document.getElementById("submit"+i).innerHTML = "Submit";
-
-		document.getElementById("function"+i).disabled = false;
-
-		document.getElementById("xFrom"+i).disabled = false;
-		document.getElementById("xTo"+i).disabled = false;
-
-		document.getElementById("red"+i).disabled = false;
-		document.getElementById("green"+i).disabled = false;
-		document.getElementById("blue"+i).disabled = false;
-
-		document.getElementById("stress"+i).disabled = false;
-	}else{
-		yy.push(document.getElementById("function"+i).value);
-
-		if(document.getElementById("xFrom"+i).value.length == 0){
-			xFrom.push(-Infinity);
-		}else{
-			xFrom.push(document.getElementById("xFrom"+i).value);
+			document.getElementById("functionDiv").innerHTML = '<div id="functionDiv' + i + '" style="margin-top:10px; margin-bottom:10px; font-size:17px;"><label>f(x)=' + yy[i] + '</label>, <label>x∈[' + xFrom[i] + ',' + xTo[i] + ']</label>, <label>Color[<label style="color:red;">Red:' + rr[i] + '</label>, <label style="color:green;">Green:' + gg[i] + '</label>, <label style="color:blue;">Blue:' + bb[i] + '</label>]</label> ' + fstress + ' <i class="fa fa-close" onclick="removef(' + i + ')" style="color:red"></i></div>' + document.getElementById("functionDiv").innerHTML;
 		}
-		
-		if(document.getElementById("xTo"+i).value.length == 0){
-			xFrom.push(Infinity);
-		}else{
-			xTo.push(document.getElementById("xTo"+i).value);
-		}
-		
-		if(document.getElementById("red"+i).value < 0) {
-			rr.push(0);
-		}else if(document.getElementById("red"+i).value > 255) {
-			rr.push(255);
-		}else{
-			rr.push(document.getElementById("red"+i).value);
-		}
-
-		if(document.getElementById("green"+i).value < 0) {
-			gg.push(0);
-		}else if(document.getElementById("green"+i).value > 255) {
-			gg.push(255);
-		}else{
-			gg.push(document.getElementById("green"+i).value);
-		}
-
-		if(document.getElementById("blue"+i).value < 0) {
-			bb.push(0);
-		}else if(document.getElementById("blue"+i).value > 255) {
-			bb.push(255);
-		}else{
-			bb.push(document.getElementById("blue"+i).value);
-		}
-
-		stress.push(document.getElementById("stress"+i).checked);
-
-		document.getElementById("submit"+i).innerHTML = "Remove";
-
-		document.getElementById("function"+i).disabled = true;
-
-		document.getElementById("xFrom"+i).disabled = true;
-		document.getElementById("xTo"+i).disabled = true;
-
-		document.getElementById("red"+i).disabled = true;
-		document.getElementById("green"+i).disabled = true;
-		document.getElementById("blue"+i).disabled = true;
-
-		document.getElementById("stress"+i).disabled = true;
 	}
+}
+
+function submit() {
+	yy.push(document.getElementById("function").value);
+	document.getElementById("function").value = "x";
+
+	if(document.getElementById("xFrom").value.length == 0){
+		xFrom.push(-Infinity);
+	}else{
+		xFrom.push(document.getElementById("xFrom").value);
+	}
+	document.getElementById("xFrom").value = "-Infinity";
+	
+	if(document.getElementById("xTo").value.length == 0){
+		xFrom.push(Infinity);
+	}else{
+		xTo.push(document.getElementById("xTo").value);
+	}
+	document.getElementById("xTo").value = "Infinity";
+	
+	if(document.getElementById("red").value < 0) {
+		rr.push(0);
+	}else if(document.getElementById("red").value > 255) {
+		rr.push(255);
+	}else{
+		rr.push(document.getElementById("red").value);
+	}
+	document.getElementById("red").value = 0;
+
+	if(document.getElementById("green").value < 0) {
+		gg.push(0);
+	}else if(document.getElementById("green").value > 255) {
+		gg.push(255);
+	}else{
+		gg.push(document.getElementById("green").value);
+	}
+	document.getElementById("green").value = 0;
+
+	if(document.getElementById("blue").value < 0) {
+		bb.push(0);
+	}else if(document.getElementById("blue").value > 255) {
+		bb.push(255);
+	}else{
+		bb.push(document.getElementById("blue").value);
+	}
+	document.getElementById("blue").value = 0;
+
+	stress.push(document.getElementById("stress").checked);
+	document.getElementById("stress").checked = false;
+
+	updateOnChange();
+	findex++;
+}
+
+function removef(fin) {
+	yy.splice(fin, 1);
+
+	xFrom.splice(fin, 1);
+	xTo.splice(fin, 1);
+	rr.splice(fin, 1);
+	gg.splice(fin, 1);
+	bb.splice(fin, 1);
+	stress.splice(fin, 1);
+
 	updateOnChange();
 }
 
 //+ create aSlider
 function createZoomSlider() {
-
 	document.getElementById("slideContainer").innerHTML = '<input type="range" min="' + zoomMin + '" max="' + zoomMax + '" step="' + zoomStep + '" value="' + zoomValue + '" id="zoomSlider" onchange="updateZoom()" style="width:50%;"><label style="font-size:30px;">Zoom</label><div> <label>a</label><input type="range" min="' + aMin + '" max="' + aMax + '" step="' + aStep + '" value="' + aValue + '" id="aSlider" onchange="updateA()" style="width:25%"><label id="aValueID">' + aValue +'</label></div>';
 }
 
